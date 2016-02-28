@@ -43,9 +43,9 @@ public class ImageMatrix implements Constants{
 				g = (short)((color & 0xFF00) >> 8);
 				b = (short)(color & 0xFF);
 				
-				if(grayScaleType == AVERAGE || grayScaleType == CUSTOM_NUMBER_GRAY_SHADES){
+				if(grayScaleType == AVERAGE || grayScaleType == SHADES_OF_GRAY){
 					avg = (short)((r + g + b) / 3);
-					if(grayScaleType == CUSTOM_NUMBER_GRAY_SHADES){
+					if(grayScaleType == SHADES_OF_GRAY){
 						conversionFactor = (numberGrayShades <= MAX_NUMBER_GRAY_SHADES && numberGrayShades >= MIN_NUMBER_GRAY_SHADES)? (255 / (numberGrayShades-1)) : 1;	
 						shade = (short)(avg/conversionFactor);
 						shade = (avg > (shade + 0.5f)*conversionFactor)? (short)((shade+1)*conversionFactor) : (short)(shade*conversionFactor);
@@ -53,7 +53,7 @@ public class ImageMatrix implements Constants{
 				}
 				
 				switch(grayScaleType){
-					case CUSTOM_NUMBER_GRAY_SHADES:
+					case SHADES_OF_GRAY:
 						matrix[i] = (byte)(shade);
 						break;
 					case LUMA_BT709:
@@ -115,7 +115,7 @@ public class ImageMatrix implements Constants{
 		return givenMatrix;
 	}
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws IOException{
 		byte[] lel = new byte[32];
 		for(byte i=0; i<lel.length; i++){
 			lel[i] = i;
@@ -125,5 +125,10 @@ public class ImageMatrix implements Constants{
 		for(byte j : compressedPiouPiou){
 			System.out.println(j);
 		}
+		
+		ImageMatrix imgMat = new ImageMatrix("C:\\Users\\Fhtagn\\Pictures\\FuckingPrettyShit\\bestSubwayPrank-GONESeXUaLxPPPPP.jpg", SHADES_OF_GRAY, 4);
+		BufferedImage img = imgMat.getImage();
+		ImageIO.write(img, "jpg", new File("C:\\Users\\Fhtagn\\Pictures\\best subway prank - GONE SeXUaL xPPPPP - 50 shades of gray version ;DDD.jpg"));
+		
 	}
 }
