@@ -9,20 +9,37 @@ public class Givens {
 	
 	public Givens(int a,int b,int n,double c) {
 		this.matGivens = new double[n][n];
-		this.p=a-1;
-		this.q=b-1;
+		this.p=a;
+		this.q=b;
 		this.angle=c;
 		
 		double radians = Math.toRadians(angle);
 		
-		this.matGivens[p][p]= Math.cos(radians);
-		this.matGivens[q][q]= Math.cos(radians);
-		this.matGivens[p][q]= Math.sin(radians);
-		this.matGivens[q][p]= - Math.sin(radians);
+		if(Math.cos(radians) > 1.0E-15){
+			this.matGivens[p][p]= Math.cos(radians);
+			this.matGivens[q][q]= Math.cos(radians);
+		}
+		
+		else{
+			this.matGivens[p][p]= 0;
+			this.matGivens[q][q]= 0;
+		}
+		
+		
+		if(Math.sin(radians) > 1.0E-15){
+			this.matGivens[p][q]= Math.sin(radians);		
+			this.matGivens[q][p]= - Math.sin(radians);
+		}
+		
+		else{
+			this.matGivens[p][q]= 0;		
+			this.matGivens[q][p]= 0;
+		}
+			
 				
 								
-		for(int i = 0;i<matGivens.length;i++){
-			for(int j = 0;j<matGivens.length;j++){
+		for(int i = 0;i<n;i++){
+			for(int j = 0;j<n;j++){
 				
 				if(i!=p && j!=p && j!=q && i!=p){
 					if(i==j)
@@ -57,19 +74,8 @@ public class Givens {
 					System.out.print(matGivens[i][j] + " | ");
 			}
 		}
+		System.out.println("\n\n");
 	}
-	
-	public static double[][] produit(double[][] matG, double[][] matB){
-		double[][] c = new double[matG.length][matG.length];
-		
-		
-		for (int i=0; i<matG.length; i++)
-		    for (int j=0; j<matG.length; j++)
-		      for (int k=0; k<matG.length; k++)
-		        c[i][k] += matB[i][k] * matG[k][j]; 
-		
-		return c;
-	} 
 	        		
 	        		
 	public double[][] getMatGivens() {
