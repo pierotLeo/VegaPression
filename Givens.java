@@ -1,8 +1,9 @@
 package compression;
 
-public class Givens {
+public class Givens extends Operations {
 	
 	private double[][] matGivens;
+	private double[][] matGivensT;
 	private int p,q;
 	private double angle;
 	
@@ -50,40 +51,77 @@ public class Givens {
 				
 			}
 		}
+		
+		this.setMatGivensT(transposeMatrix(this.getMatGivens()));
 	}
 	
 	
-	public void afficher(){
+	public void afficherGivens(){
 		for(int i = 0;i<matGivens.length;i++){
 			System.out.println();
 			for(int j = 0;j<matGivens.length;j++){
-				
-				if(i==p && j==p)
-					System.out.print("cos(" + this.angle + ")  | ");
-				else if(i==q && j==q)
-					System.out.print("cos(" + this.angle + ") | ");
-				else if(i==p && j==q)
-					System.out.print("sin(" + this.angle + ") | ");
-				else if(i==q && j==p)
-					System.out.print("-sin(" + this.angle + ") | ");
-				else if(j==p && i!=q)	
-					System.out.print(matGivens[i][j] + "        | ");
-				else if(j==q)
-					System.out.print(matGivens[i][j] + "       | ");
-				else
-					System.out.print(matGivens[i][j] + " | ");
+				System.out.print(matGivens[i][j] + " | ");
 			}
 		}
 		System.out.println("\n\n");
 	}
 	        		
-	        		
+	public void afficherGivensT(){
+		for(int i = 0;i<matGivensT.length;i++){
+			System.out.println();
+			for(int j = 0;j<matGivensT.length;j++){
+				System.out.print(matGivensT[i][j] + " | ");
+			}
+		}
+		System.out.println("\n\n");
+	}
+	
 	public double[][] getMatGivens() {
 		return matGivens;
 	}
 
 	public void setMatGivens(double[][] matGivens) {
 		this.matGivens = matGivens;
+	}
+
+
+	public double[][] getMatGivensT() {
+		return matGivensT;
+	}
+
+
+	public void setMatGivensT(double[][] matGivensT) {
+		this.matGivensT = matGivensT;
+	}
+
+
+	public int getP() {
+		return p;
+	}
+
+
+	public void setP(int p) {
+		this.p = p;
+	}
+
+
+	public int getQ() {
+		return q;
+	}
+
+
+	public void setQ(int q) {
+		this.q = q;
+	}
+
+
+	public double getAngle() {
+		return angle;
+	}
+
+
+	public void setAngle(double angle) {
+		this.angle = angle;
 	}
 	
 }

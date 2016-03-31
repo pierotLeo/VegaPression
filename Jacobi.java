@@ -1,9 +1,11 @@
 package compression;
 
-public class Jacobi {
+public class Jacobi extends Operations {
 	private double[][] matrice;
 	private int taille;
-	
+	private double téta;
+	private double[][] B1 = new double[100][100];
+	private double[][] B2 = new double[100][100];
 	
 	public double[][] getMatrice() {
 		return matrice;
@@ -14,97 +16,76 @@ public class Jacobi {
 	}
 	
 	public Jacobi(double[][] B){
-		this.taille = B.length;
-		this.matrice = new double[taille][taille];				
-		double tmp = B[0][0];
-		int p=0,q=0;
+		this.B1=produit(B,transposeMatrix(B));
+		afficher(this.B1);
+		this.B2=produit(transposeMatrix(B),B);
+		this.taille = B1.length;
+		this.matrice = new double[taille][taille];
+		this.matrice = B;
+		
+		//for(int x=0;x<100;x++){
+				
+			double tmp = this.B1[0][0];
+			int p=0,q=0;
 
 		
-		for(int i=0;i<this.taille;i++){
-			for(int j=0;j<this.taille;j++){
-				if(Math.abs(B[i][j])>tmp && i!=j && i<=this.taille && j<=this.taille && i>0 && j>0){
-					tmp=B[i][j];
-					p=i;
-					q=j;
-				}
-			}
-		}
-			
-		System.out.println("\n" + p + " " + q + "\n\n");
-		
-		Givens givens = new Givens(p,q,taille,90);
-		givens.afficher();	
-		
-		double[][] givensTranspose = Test.transposeMatrix(givens.getMatGivens());
-		this.afficher(givensTranspose);
-		
-		
-		double[][] temp = new double[taille][taille];
-		temp = Test.produit(givensTranspose,B);
-				
-		double[][] jacobi = new double[taille][taille];
-		jacobi = Test.produit(temp, givens.getMatGivens());
-		
-		
-		this.matrice=jacobi;
-		this.afficher(jacobi);			
-		
-		
-		for(int x=0;x<10;x++){
-						
-			tmp = jacobi[0][0];
-			p=0;
-			q=0;
-		
-			for(int i=0;i<this.taille;i++){
-				for(int j=0;j<this.taille;j++){
-					if(Math.abs(jacobi[i][j])>tmp && i!=j && i<=this.taille && j<=this.taille && i>0 && j>0){
-						tmp=jacobi[i][j];
+			for(int i=1;i<this.taille;i++){
+				for(int j=1;j<this.taille;j++){
+					if(Math.abs(this.B1[i][j])>tmp && i!=j){
+						tmp=B1[i][j];
 						p=i;
 						q=j;
-					
 					}
 				}
 			}
-
-			System.out.println("\n" + p + " " + q);
-			givens = new Givens(p,q,taille,90);
-			givens.afficher();
-	
-		
-			givensTranspose = Test.transposeMatrix(givens.getMatGivens());
-			this.afficher(givensTranspose);		
-		
-			temp = new double[taille][taille];
-			temp = Test.produit(givensTranspose,this.matrice);
-				
-			jacobi = new double[taille][taille];
-			jacobi = Test.produit(temp, givens.getMatGivens());
-		
-		
+			
+			System.out.println(p + " " + q);
+			
+			téta = polynome(this.B1,p,q);
+			
+			Givens givens = new Givens(p,q,taille,téta);
+			
+			double[][] temp = new double[taille][taille];
+			temp = produitGivensT(givens,this.matrice);
+			
+			double[][] jacobi = new double[taille][taille];
+			jacobi = produitGivens(temp, givens);
+					
 			this.matrice=jacobi;
-			this.afficher(jacobi);
-		
-		}
+			afficher(jacobi);			
+		//}
 	}
-	
-	
-	public void afficher(double[][] aff){
-		for(int i = 0;i<aff.length;i++){
-			System.out.println();
-			for(int j = 0;j<aff.length;j++){
-				
-				if(aff[i][j] < 10)	
-					System.out.print(aff[i][j] + "    | ");
-				else if(aff[i][j] < 100)
-					System.out.print(aff[i][j] + "   | ");
-				else if(aff[i][j] < 1000)
-					System.out.print(aff[i][j] + "  | ");
-				else
-					System.out.print(aff[i][j] + " | ");
-			}
-		}
-		System.out.println("\n\n");
+
+	public int getTaille() {
+		return taille;
+	}
+
+	public void setTaille(int taille) {
+		this.taille = taille;
+	}
+
+	public double[][] getB1() {
+		return B1;
+	}
+
+	public void setB1(double[][] b1) {
+		B1 = b1;
+	}
+
+	public double[][] getB2() {
+		return B2;
+	}
+
+	public void setB2(double[][] b2) {
+		B2 = b2;
+	}
+
+	public double getTéta() {
+		return téta;
+	}
+
+	public void setTéta(double téta) {
+		this.téta = téta;
 	}
 	
 }
