@@ -57,14 +57,14 @@ public class Operations {
 
 		for(int i=0;i<n;i++){
 			for(int k=0;k<n;k++){
-				retour[i][p]+= mat[i][k] * matGT.getMatGivensT()[k][p];
+				retour[p][i]+= mat[p][k] * matGT.getMatGivens()[k][i];
 			}
 	
 		}
 		
 		for(int i=0;i<n;i++){
 			for(int k=0;k<n;k++){
-				retour[i][q]+= mat[i][k] * matGT.getMatGivensT()[k][q]; 				
+				retour[q][i]+= mat[q][k] * matGT.getMatGivens()[k][i]; 				
 			}
 		}
 		
@@ -114,9 +114,19 @@ public class Operations {
 	 
 	 
 	public double polynome(double[][] matrice,int p, int q){
-		double discriminant = (4*(Math.pow(((matrice[p][p]-matrice[q][q])/(2*matrice[p][q])), 2)))+4;
-		System.out.println(( 2 / (( -2 *((matrice[p][p] - matrice[q][q]) / (2 * matrice[p][q]))) + Math.sqrt(discriminant))));
-		return Math.atan(2/((-2*(matrice[p][p] - matrice[q][q])/(2*matrice[p][q]) + Math.sqrt(discriminant))));
+		double a = 1;
+		double b = 2*((matrice[p][p] - matrice[q][q]) / (2 * matrice[p][q]));
+		double c = -1;
+		
+		double discriminant = b*b - (4 * a * c);
+		double s1 = (-b + Math.sqrt(discriminant))/2*a;
+		double s2 = (-b - Math.sqrt(discriminant))/2*a;
+		double teta = Math.atan(1/s1);
+		System.out.println("téta = " + teta);
+
+		System.out.println("équation = " + (Math.pow((1/Math.tan(teta)),2) + (b*(1/Math.tan(teta)) -1)));
+
+		return teta; //téta en radians
 		
 	}
 }

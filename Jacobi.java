@@ -23,7 +23,7 @@ public class Jacobi extends Operations {
 		this.matrice = new double[taille][taille];
 		this.matrice = B;
 		
-		//for(int x=0;x<100;x++){
+		for(int x=0;x<3;x++){
 				
 			double tmp = this.B1[0][0];
 			int p=0,q=0;
@@ -46,14 +46,18 @@ public class Jacobi extends Operations {
 			Givens givens = new Givens(p,q,taille,téta);
 			
 			double[][] temp = new double[taille][taille];
-			temp = produitGivensT(givens,this.matrice);
+			temp = produitGivensT(givens,this.B1);
+			
+			afficher(temp);
 			
 			double[][] jacobi = new double[taille][taille];
 			jacobi = produitGivens(temp, givens);
 					
-			this.matrice=jacobi;
-			afficher(jacobi);			
-		//}
+			this.B1=jacobi;
+			this.B1[p][q]=0;
+			afficher(this.B1);			
+		}
+		//afficher(this.B1);
 	}
 
 	public int getTaille() {

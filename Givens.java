@@ -14,11 +14,9 @@ public class Givens extends Operations {
 		this.q=b;
 		this.angle=c;
 		
-		double radians = Math.toRadians(angle);
-		
-		if(Math.cos(radians) > 1.0E-15){
-			this.matGivens[p][p]= Math.cos(radians);
-			this.matGivens[q][q]= Math.cos(radians);
+		if(Math.cos(this.angle) > 1.0E-15){
+			this.matGivens[p][p]= Math.cos(this.angle);
+			this.matGivens[q][q]= Math.cos(this.angle);
 		}
 		
 		else{
@@ -27,9 +25,9 @@ public class Givens extends Operations {
 		}
 		
 		
-		if(Math.sin(radians) > 1.0E-15){
-			this.matGivens[p][q]= Math.sin(radians);		
-			this.matGivens[q][p]= - Math.sin(radians);
+		if(Math.sin(this.angle) > 1.0E-15){
+			this.matGivens[p][q]= Math.sin(this.angle);		
+			this.matGivens[q][p]= - Math.sin(this.angle);
 		}
 		
 		else{
