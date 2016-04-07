@@ -24,7 +24,7 @@ public class Jacobi extends Operations {
 	
 	public Jacobi(double[][] B){
 		afficher(B);
-		this.B1=B;//produit(B,transposeMatrix(B));	
+		this.B1=produit(B,transposeMatrix(B));	
 		afficher(this.B1);
 		this.B2=produit(transposeMatrix(B),B);
 		afficher(this.B2);
@@ -195,12 +195,11 @@ public class Jacobi extends Operations {
 			for(int x=i,y=j;x>0 && y>0;x--,y--){
 				
 				if(this.valP2[x][y]>this.valP2[x-1][y-1]){
-					tmp = Math.sqrt(Math.abs((this.valP2[x-1][x-1])));
+					tmp = this.valP2[x-1][x-1];
 					this.valP2[x-1][y-1]=this.valP2[x][y];
 					this.valP2[x][y]=tmp;
 				}						
 			}
-			this.valP2[i][j]=Math.sqrt(Math.abs((this.valP2[i][j])));
 		}	
 		
 		afficher(this.valP2);
