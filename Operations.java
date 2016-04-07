@@ -20,7 +20,7 @@ public class Operations {
 		System.out.println("\n\n");
 	}
 	
-	public double[][] produit(double[][] matG, double[][] matB){
+	public static double[][] produit(double[][] matG, double[][] matB){
 		double[][] c = new double[matG.length][matB[0].length]; 
 		
 		for (int i=0; i<matG.length; i++){
@@ -41,8 +41,8 @@ public class Operations {
 	public double[][] produitMatrixToGivens(double[][] matrix, double[][] givens, int par_p, int par_q){
 		  double[][] retour = new double[matrix.length][matrix.length];
 		  
-		  int p = par_p;
-		  int q = par_q;  
+		  int p = (par_p <= par_q) ? par_p : par_q;
+		   int q = (par_q >= par_p) ? par_q : par_p;
 		  int n = matrix.length;
 		  
 		  for(int i=0; i<n; i++){
@@ -73,8 +73,8 @@ public class Operations {
 	public double[][] produitGivensToMatrix(double[][] givens, double[][] matrix, int par_p, int par_q){
 		  double[][] retour = new double[matrix.length][matrix.length];
 		  
-		  int p = par_p;
-		  int q = par_q;  
+		  int p = (par_p <= par_q) ? par_p : par_q;
+		  int q = (par_q >= par_p) ? par_q : par_p;  
 		  int n = matrix.length;
 		  
 		  for(int i=0; i<n; i++){
@@ -104,7 +104,7 @@ public class Operations {
 	
 	
 	
-	 public double[][] transposeMatrix(double [][] m){
+	 public static double[][] transposeMatrix(double [][] m){
 	        double[][] temp = new double[m[0].length][m.length];
 	        for (int i = 0; i < m.length; i++)
 	            for (int j = 0; j < m[0].length; j++)
