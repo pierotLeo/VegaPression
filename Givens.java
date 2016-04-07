@@ -8,37 +8,21 @@ public class Givens extends Operations {
 	private double angle;
 	
 	
-	public Givens(int a,int b,int n,double c) {
+	public Givens(int a,int b,int n,int m,double c) {
 		this.matGivens = new double[n][n];
 		this.p=a;
 		this.q=b;
 		this.angle=c;
 		
-		if(Math.cos(this.angle) > 1.0E-15){
-			this.matGivens[p][p]= Math.cos(this.angle);
-			this.matGivens[q][q]= Math.cos(this.angle);
-		}
-		
-		else{
-			this.matGivens[p][p]= 0;
-			this.matGivens[q][q]= 0;
-		}
-		
-		
-		if(Math.sin(this.angle) > 1.0E-15){
-			this.matGivens[p][q]= Math.sin(this.angle);		
-			this.matGivens[q][p]= - Math.sin(this.angle);
-		}
-		
-		else{
-			this.matGivens[p][q]= 0;		
-			this.matGivens[q][p]= 0;
-		}
-			
+		this.matGivens[p][p]= Math.cos(this.angle);
+		this.matGivens[q][q]= Math.cos(this.angle);			
+		this.matGivens[p][q]= Math.sin(this.angle);		
+		this.matGivens[q][p]= - Math.sin(this.angle);
+
 				
 								
 		for(int i = 0;i<n;i++){
-			for(int j = 0;j<n;j++){
+			for(int j = 0;j<m;j++){
 				
 				if(i!=p && j!=p && j!=q && i!=p){
 					if(i==j)
