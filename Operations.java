@@ -25,7 +25,6 @@ public class Operations {
 		
 		for (int i=0; i<matG.length; i++){
 		    for (int j=0; j<matB[0].length; j++){
-		    	System.out.println(i + " | " +j);
 		    	c[i][j]=0;
 		    	
 		    	for (int k=0; k<matG[0].length && k<matB.length; k++){
