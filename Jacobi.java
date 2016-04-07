@@ -176,12 +176,12 @@ public class Jacobi extends Operations {
 			for(int x=i,y=j;x>0 && y>0;x--,y--){
 				
 				if(this.valP1[x][y]>this.valP1[x-1][y-1]){
-					tmp = Math.sqrt(Math.abs((this.valP1[x-1][x-1])));
+					tmp = this.valP1[x-1][x-1];
 					this.valP1[x-1][y-1]=this.valP1[x][y];
 					this.valP1[x][y]=tmp;
-				}						
+				}	
 			}
-			this.valP1[i][j]=Math.sqrt(Math.abs((this.valP1[i][j])));
+			
 		}	
 		
 		afficher(this.valP1);
