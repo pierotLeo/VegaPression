@@ -2,8 +2,8 @@ package compression;
 
 public class Jacobi extends Operations {
 	private double[][] matrice;
-	private int taille_colonne;
-	private int taille_ligne;
+	private int taille_B1;
+	private int taille_B2;
 	private double teta;
 	private double[][] B1 = new double[100][100];
 	private double[][] B2 = new double[100][100];
@@ -13,6 +13,8 @@ public class Jacobi extends Operations {
 	
 	private double[][] vectP1;
 	private double[][] vectP2;
+	
+	private double[][] sigma;
 	
 	public double[][] getMatrice() {
 		return matrice;
@@ -29,21 +31,21 @@ public class Jacobi extends Operations {
 		this.B2=produit(transposeMatrix(B),B);
 		afficher(this.B2);
 		
-		this.taille_colonne = B1.length;
-		this.taille_ligne = B1[0].length;
-		this.matrice = new double[taille_colonne][taille_ligne];
+		this.taille_B1 = B1.length;
+		this.taille_B2 = B2.length;
+		this.matrice = new double[taille_B1][taille_B2];
 		this.matrice = B;
 		
 		int p=0,q=0;
 		double tmp;
 		Givens givens;
-		double[][] temp = new double[taille_colonne][taille_ligne];
-		double[][] jacobi =  new double[taille_colonne][taille_ligne];
+		double[][] tempB1 = new double[taille_B1][taille_B1];
+		double[][] jacobiB1 =  new double[taille_B1][taille_B1];
 		
 		tmp = 0.0;
 		
-		for(int i=0;i<this.taille_colonne;i++){
-			for(int j=0;j<this.taille_ligne;j++){
+		for(int i=0;i<this.taille_B1;i++){
+			for(int j=0;j<this.taille_B1;j++){
 				if((Math.abs(this.B1[i][j]))>Math.abs(tmp) && i!=j){
 					tmp=B1[i][j];
 					p=i;
@@ -55,23 +57,23 @@ public class Jacobi extends Operations {
 		
 		this.teta = polynome(this.B1,p,q);
 		
-		givens = new Givens(p,q,taille_colonne,taille_ligne,teta);
+		givens = new Givens(p,q,taille_B1,taille_B1,teta);
 		
-		temp = produitGivensToMatrix(givens.getMatGivensT(),this.B1,p,q);
+		tempB1 = produitGivensToMatrix(givens.getMatGivensT(),this.B1,p,q);
 		//temp = produit(givens.getMatGivensT(),this.B1);
 
-		jacobi = produitMatrixToGivens(temp,givens.getMatGivens(),p,q);
+		jacobiB1 = produitMatrixToGivens(tempB1,givens.getMatGivens(),p,q);
 		//jacobi = produit(temp,givens.getMatGivens());
 		
 		vectP1=givens.getMatGivens();
 		
-		this.B1=jacobi;
+		this.B1=jacobiB1;
 				
-		while(!this.condArret(this.B1,p,q)){		
+		while(!this.condArretB1(this.B1,p,q)){		
 			tmp = 0.0;
 		
-			for(int i=0;i<this.taille_colonne;i++){
-				for(int j=0;j<this.taille_ligne;j++){
+			for(int i=0;i<this.taille_B1;i++){
+				for(int j=0;j<this.taille_B1;j++){
 					if((Math.abs(this.B1[i][j]))>Math.abs(tmp) && i!=j){
 						tmp=B1[i][j];
 						p=i;
@@ -82,23 +84,26 @@ public class Jacobi extends Operations {
 			
 			this.teta = polynome(this.B1,p,q);
 			
-			givens = new Givens(p,q,taille_colonne,taille_ligne,teta);
+			givens = new Givens(p,q,taille_B1,taille_B1,teta);
 			
 			//temp = produitGivensToMatrix(givens.getMatGivensT(),this.B1,p,q);
-			temp = produit(givens.getMatGivensT(),this.B1);
+			tempB1 = produit(givens.getMatGivensT(),this.B1);
 
 			//jacobi = produitMatrixToGivens(temp,givens.getMatGivens(),p,q);
-			jacobi = produit(temp,givens.getMatGivens());
+			jacobiB1 = produit(tempB1,givens.getMatGivens());
 			
-			vectP1=produit(vectP1,givens.getMatGivens());
+			vectP1=produitMatrixToGivens(vectP1,givens.getMatGivens(),p,q);
 			
-			this.B1=jacobi;
+			this.B1=jacobiB1;
+
 		}
 		
 		tmp = 0.0;
+		double[][] tempB2 = new double[taille_B2][taille_B2];
+		double[][] jacobiB2 =  new double[taille_B2][taille_B2];
 		
-		for(int i=0;i<this.taille_colonne;i++){
-			for(int j=0;j<this.taille_ligne;j++){
+		for(int i=0;i<this.taille_B2;i++){
+			for(int j=0;j<this.taille_B2;j++){
 				if((Math.abs(this.B2[i][j]))>Math.abs(tmp) && i!=j){
 					tmp=B2[i][j];
 					p=i;
@@ -110,23 +115,23 @@ public class Jacobi extends Operations {
 		
 		this.teta = polynome(this.B2,p,q);
 		
-		givens = new Givens(p,q,taille_colonne,taille_ligne,teta);
+		givens = new Givens(p,q,taille_B2,taille_B2,teta);
 		
-		temp = produitGivensToMatrix(givens.getMatGivensT(),this.B2,p,q);
+		tempB2 = produitGivensToMatrix(givens.getMatGivensT(),this.B2,p,q);
 		//temp = produit(givens.getMatGivensT(),this.B2);
 
-		jacobi = produitMatrixToGivens(temp,givens.getMatGivens(),p,q);
+		jacobiB2 = produitMatrixToGivens(tempB2,givens.getMatGivens(),p,q);
 		//jacobi = produit(temp,givens.getMatGivens());
 		
-		vectP1=givens.getMatGivens();
+		vectP2=givens.getMatGivens();
 		
-		this.B2=jacobi;
+		this.B2=jacobiB2;
 				
-		while(!this.condArret(this.B2,p,q)){		
+		while(!this.condArretB2(this.B2,p,q)){		
 			tmp = 0.0;
 		
-			for(int i=0;i<this.taille_colonne;i++){
-				for(int j=0;j<this.taille_ligne;j++){
+			for(int i=0;i<this.taille_B2;i++){
+				for(int j=0;j<this.taille_B2;j++){
 					if((Math.abs(this.B2[i][j]))>Math.abs(tmp) && i!=j){
 						tmp=B2[i][j];
 						p=i;
@@ -137,27 +142,39 @@ public class Jacobi extends Operations {
 			
 			this.teta = polynome(this.B2,p,q);
 			
-			givens = new Givens(p,q,taille_colonne,taille_ligne,teta);
+			givens = new Givens(p,q,taille_B2,taille_B2,teta);
 			
-			temp = produitGivensToMatrix(givens.getMatGivensT(),this.B2,p,q);
+			tempB2 = produitGivensToMatrix(givens.getMatGivensT(),this.B2,p,q);
 			//temp = produit(givens.getMatGivensT(),this.B2);
 
-			jacobi = produitMatrixToGivens(temp,givens.getMatGivens(),p,q);
+			jacobiB2 = produitMatrixToGivens(tempB2,givens.getMatGivens(),p,q);
 			//jacobi = produit(temp,givens.getMatGivens());
 			
-			vectP1=produit(vectP1,givens.getMatGivens());
+			vectP2=produitMatrixToGivens(vectP2,givens.getMatGivens(),p,q);
 			
-			this.B2=jacobi;
+			this.B2=jacobiB2;
 			
 		}
 		
+		System.out.println("B1 fini :");
 		afficher(this.B1);
+		System.out.println("B2 fini :");
 		afficher(this.B2);
 	}
 
-	public boolean condArret(double[][] matrice,int p, int q){
-		for(int i = 0;i<this.taille_colonne;i++){
-			for(int j=0;j<this.taille_ligne;j++){
+	public boolean condArretB1(double[][] matrice,int p, int q){
+		for(int i = 0;i<this.taille_B1;i++){
+			for(int j=0;j<this.taille_B1;j++){
+				if(Math.abs(matrice[i][j])>1E-8 && i!=j)
+					return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean condArretB2(double[][] matrice,int p, int q){
+		for(int i = 0;i<this.taille_B2;i++){
+			for(int j=0;j<this.taille_B2;j++){
 				if(Math.abs(matrice[i][j])>1E-8 && i!=j)
 					return false;
 			}
@@ -167,11 +184,12 @@ public class Jacobi extends Operations {
 	
 	public void valP(){
 		double tmp;
-		this.valP1 = new double[taille_colonne][taille_ligne];
-		this.valP1[0][0]=Math.sqrt(Math.abs(this.B1[0][0]));
-		for(int i=1,j=1;i<taille_colonne && j<taille_ligne;i++,j++){
+		double tmp2;
+		this.valP1 = new double[taille_B1][taille_B1];
+		this.valP1[0][0]=Math.sqrt(this.B1[0][0]);
+		for(int i=1,j=1;i<taille_B1 && j<taille_B1;i++,j++){
 			
-			this.valP1[i][j]=Math.sqrt(Math.abs((this.B1[i][j])));
+			this.valP1[i][j]=Math.sqrt((this.B1[i][j]));
 			
 			for(int x=i,y=j;x>0 && y>0;x--,y--){
 				
@@ -179,18 +197,22 @@ public class Jacobi extends Operations {
 					tmp = this.valP1[x-1][x-1];
 					this.valP1[x-1][y-1]=this.valP1[x][y];
 					this.valP1[x][y]=tmp;
-				}	
+					
+					for(int a=0;a<this.vectP1.length;a++){
+						tmp2 = this.vectP1[a][x];
+						this.vectP1[a][x] = this.vectP1[a][x-1];
+						this.vectP1[a][x-1] = tmp2;
+					}
+				}
 			}
+		}
 			
-		}	
 		
-		afficher(this.valP1);
-		
-		this.valP2 = new double[taille_colonne][taille_ligne];
-		this.valP2[0][0]=Math.sqrt(Math.abs(this.B2[0][0]));
-		for(int i=1,j=1;i<taille_colonne && j<taille_ligne;i++,j++){
+		this.valP2 = new double[taille_B2][taille_B2];
+		this.valP2[0][0]=Math.sqrt(this.B2[0][0]);
+		for(int i=1,j=1;i<taille_B2 && j<taille_B2;i++,j++){
 			
-			this.valP2[i][j]=Math.sqrt(Math.abs((this.B2[i][j])));
+			this.valP2[i][j]=Math.sqrt((this.B2[i][j]));
 			
 			for(int x=i,y=j;x>0 && y>0;x--,y--){
 				
@@ -198,24 +220,51 @@ public class Jacobi extends Operations {
 					tmp = this.valP2[x-1][x-1];
 					this.valP2[x-1][y-1]=this.valP2[x][y];
 					this.valP2[x][y]=tmp;
-				}						
+					
+					for(int a=0;a<this.vectP2.length;a++){
+						tmp2 = this.vectP2[a][x];
+						this.vectP2[a][x] = this.vectP2[a][x-1];
+						this.vectP2[a][x-1] = tmp2;
+					}
+				}				
 			}
-		}	
+		}
 		
 		afficher(this.valP2);
+		
+		int m;
+		if(this.taille_B1<this.taille_B2){
+			m=this.taille_B1;
+			this.sigma = new double[this.taille_B1][this.taille_B1];
+			
+			for(int i=0;i<m;i++){
+				for(int j=0;j<m;j++){
+					this.sigma[i][j]=this.valP1[i][j];
+				}
+			}
+		}
+		
+		else{
+			m=this.taille_B2;
+			this.sigma = new double[this.taille_B2][this.taille_B2];
+			
+			for(int i=0;i<m;i++){
+				for(int j=0;j<m;j++){
+					this.sigma[i][j]=this.valP2[i][j];
+				}
+			}
+		}
+		
+		
+		afficher(sigma);
 	}
+	
 	
 	public void vectP(){
 		afficher(this.vectP1);
+		afficher(this.vectP2);
 	}
 	
-	public int getTaille() {
-		return taille_ligne;
-	}
-
-	public void setTaille(int taille) {
-		this.taille_ligne = taille;
-	}
 
 	public double[][] getB1() {
 		return B1;
@@ -239,22 +288,6 @@ public class Jacobi extends Operations {
 
 	public void setTéta(double teta) {
 		this.teta = teta;
-	}
-
-	public int getTaille_colonne() {
-		return taille_colonne;
-	}
-
-	public void setTaille_colonne(int taille_colonne) {
-		this.taille_colonne = taille_colonne;
-	}
-
-	public int getTaille_ligne() {
-		return taille_ligne;
-	}
-
-	public void setTaille_ligne(int taille_ligne) {
-		this.taille_ligne = taille_ligne;
 	}
 
 	public void setTeta(double teta) {
@@ -291,6 +324,30 @@ public class Jacobi extends Operations {
 
 	public void setVectP2(double[][] vectP2) {
 		this.vectP2 = vectP2;
+	}
+
+	public int getTaille_B1() {
+		return taille_B1;
+	}
+
+	public void setTaille_B1(int taille_B1) {
+		this.taille_B1 = taille_B1;
+	}
+
+	public int getTaille_B2() {
+		return taille_B2;
+	}
+
+	public void setTaille_B2(int taille_B2) {
+		this.taille_B2 = taille_B2;
+	}
+
+	public double[][] getSigma() {
+		return sigma;
+	}
+
+	public void setSigma(double[][] sigma) {
+		this.sigma = sigma;
 	}
 	
 }
